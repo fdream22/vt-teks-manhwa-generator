@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Teks VT Manhua etc Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #0c0c12;
+            font-family: 'Poppins', sans-serif;
+            color: #edf2ff;
+            padding: 1.25rem;
+            padding-bottom: 3rem;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .app-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 1.8rem;
+            border-left: 4px solid #ffaa44;
+            padding-left: 1rem;
+            flex-wrap: wrap;
+        }
+        .app-header h1 {
+            font-weight: 700;
+            font-size: 1.7rem;
+            background: linear-gradient(135deg, #ffffff 0%, #c7d0ff 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .badge-xiaomi {
+            font-size: 0.7rem;
+            background: #26262e;
+            padding: 0.25rem 0.8rem;
+            border-radius: 40px;
+            color: #ffcd7e;
+        }
+        .form-card {
+            background: #13131c;
+            border-radius: 32px;
+            padding: 1.6rem 1.4rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 18px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid #2a2a36;
+        }
+        .input-group {
+            margin-bottom: 1.35rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .input-group label {
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #bec6ff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        input, textarea, select {
+            background: #1e1e2a;
+            border: 1px solid #333345;
+            border-radius: 20px;
+            padding: 0.85rem 1rem;
+            font-family: 'Poppins', monospace;
+            font-size: 0.95rem;
+            color: #f0f3ff;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+        input:focus, textarea:focus {
+            border-color: #ffb347;
+            box-shadow: 0 0 0 3px rgba(255, 180, 71, 0.2);
+            background: #242430;
+        }
+        .radio-group {
+            display: flex;
+            gap: 1.8rem;
+            align-items: center;
+            background: #1e1e2a;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            border: 1px solid #333345;
+        }
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            color: #e0e6ff;
+            font-size: 0.9rem;
+        }
+        input[type="radio"] {
+            accent-color: #ffaa44;
+            width: 18px;
+            height: 18px;
+            margin: 0;
+        }
+        .genre-container {
+            background: #1e1e2a;
+            border: 1px solid #333345;
+            border-radius: 20px;
+            padding: 0.6rem;
+        }
+        .genre-container:focus-within {
+            border-color: #ffb347;
+            box-shadow: 0 0 0 3px rgba(255, 180, 71, 0.2);
+        }
+        .genre-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .genre-chip {
+            background: #2d2d40;
+            padding: 5px 12px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #ffecb3;
+        }
+        .genre-chip button {
+            background: none;
+            border: none;
+            color: #ffa07a;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .genre-search-area {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .genre-search-area input {
+            flex: 1;
+            background: #12121c;
+            border: 1px solid #3a3a4a;
+            border-radius: 40px;
+            padding: 0.6rem 1rem;
+            font-size: 0.85rem;
+        }
+        .genre-search-area button {
+            background: #3a3a4e;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 40px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .genre-suggestions {
+            background: #1e1e2c;
+            border-radius: 20px;
+            margin-top: 10px;
+            max-height: 180px;
+            overflow-y: auto;
+            display: none;
+            border: 1px solid #3a3a50;
+        }
+        .genre-suggestions.show {
+            display: block;
+        }
+        .suggestion-item {
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #2c2c3c;
+        }
+        .suggestion-item:hover {
+            background: #ffb34730;
+            color: #ffdd99;
+        }
+        .preview-card {
+            background: #0f0f18;
+            border-radius: 32px;
+            padding: 1.4rem;
+            border: 1px solid #2a2a36;
+        }
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .preview-header h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #ffda88;
+        }
+        .copy-btn {
+            background: #2c2c3c;
+            border: none;
+            padding: 0.55rem 1.4rem;
+            border-radius: 50px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .copy-btn:hover {
+            background: #404056;
+            transform: scale(0.97);
+        }
+        .preview-content {
+            background: #0a0a10;
+            padding: 1.3rem;
+            border-radius: 24px;
+            font-family: 'Poppins', monospace;
+            font-size: 0.9rem;
+            line-height: 1.55;
+            white-space: pre-wrap;
+            word-break: break-word;
+            border-left: 3px solid #ffb347;
+            color: #f2f2ff;
+        }
+        .notification {
+            position: fixed;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #2a2a38;
+            backdrop-filter: blur(20px);
+            padding: 0.7rem 1.6rem;
+            border-radius: 50px;
+            font-weight: 500;
+            color: #ffecb3;
+            box-shadow: 0 8px 24px black;
+            opacity: 0;
+            transition: opacity 0.25s, transform 0.2s;
+            pointer-events: none;
+            z-index: 1000;
+            font-size: 0.85rem;
+            border: 1px solid #ffaa55;
+        }
+        .notification.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        @media (max-width: 550px) {
+            body { padding: 1rem; }
+            .form-card { padding: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="app-header">
+        <h1>📘 Teks VT Generator</h1>
+        <span class="badge-xiaomi">Karna w males nulis gua buat aja</span>
+    </div>
+
+    <div class="form-card">
+        <div class="input-group">
+            <label>📌 Header <span style="color:#a9b2f0;">(auto bold sans)</span></label>
+            <input type="text" id="headerInput" placeholder="Kosongkan jika tidak ingin muncul">
+        </div>
+        <div class="input-group">
+            <label>📝 𝗦𝗶𝗻𝗼𝗽𝘀𝗶𝘀:</label>
+            <textarea id="sinopsisInput" placeholder="Cerita singkat ..."></textarea>
+        </div>
+        <div class="input-group">
+            <label>📝 𝗣𝗿𝗲𝘀𝗲𝘁:</label>
+            <input type="text" id="presetInput" placeholder="@ ..." value="@">
+        </div>
+        <div class="input-group">
+            <label>📌 𝗧𝗶𝘁𝗹𝗲:</label>
+            <input type="text" id="titleInput" placeholder="Judul Manhwa dll">
+        </div>
+        <div class="input-group">
+            <label>📌 𝗖𝗵𝗮𝗽𝘁𝗲𝗿:</label>
+            <input type="text" id="chapterInput" placeholder="Chapter">
+        </div>
+        <div class="input-group">
+            <label>📌 𝗠𝗖:</label>
+            <input type="text" id="mcNameInput" placeholder="Nama karakter">
+        </div>
+        <div class="input-group">
+            <label>⚥ Gender MC:</label>
+            <div class="radio-group">
+                <label><input type="radio" name="gender" value="Male" checked> Male</label>
+                <label><input type="radio" name="gender" value="Female"> Female</label>
+            </div>
+        </div>
+        <div class="input-group">
+            <label>🎭 𝗚𝗲𝗻𝗿𝗲 (pilih banyak, bisa cari & tambah):</label>
+            <div class="genre-container" id="genreContainer">
+                <div class="genre-chips" id="genreChipsArea"></div>
+                <div class="genre-search-area">
+                    <input type="text" id="genreSearchInput" placeholder="Cari atau tambah genre" autocomplete="off">
+                    <button type="button" id="addGenreBtn">+ Tambah</button>
+                </div>
+                <div class="genre-suggestions" id="genreSuggestions"></div>
+            </div>
+            <input type="hidden" id="genreHidden" value="">
+        </div>
+        <div class="input-group">
+            <label>✍️ 𝗔𝘂𝘁𝗵𝗼𝗿:</label>
+            <input type="text" id="authorInput" placeholder="Nama Author">
+        </div>
+        <div class="input-group">
+            <label>🏢 𝗦𝘁𝘂𝗱𝗶𝗼:</label>
+            <input type="text" id="studioInput" placeholder="Nama studio">
+        </div>
+        <div class="input-group">
+            <label>📌 𝗦𝘁𝗮𝘁𝘂𝘀:</label>
+            <select id="statusInput">
+                <option value="" selected disabled hidden>Pilih Status</option>
+                <option value="Ongoing">Ongoing</option>
+                <option value="End">End</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>📖 𝗙𝗼𝗿𝗺𝗮𝘁:</label>
+            <select id="formatInput">
+                <option value="" selected disabled hidden>Pilih Format</option>
+                <option value="Manhwa">Manhwa</option>
+                <option value="Manhua">Manhua</option>
+                <option value="Manga">Manga</option>
+                <option value="Lightnovel">Lightnovel</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="preview-card">
+        <div class="preview-header">
+            <h2>🔍 Preview Hasil</h2>
+            <button class="copy-btn" id="copyBtn">📋 Copy Teks</button>
+        </div>
+        <div class="preview-content" id="previewArea"></div>
+    </div>
+</div>
+<div id="notificationToast" class="notification">✅ Berhasil disalin!</div>
+
+<script>
+    // Unicode Bold Sans Serif
+    function toUnicodeBold(str) {
+        const map = {
+            'A':'𝗔','B':'𝗕','C':'𝗖','D':'𝗗','E':'𝗘','F':'𝗙','G':'𝗚','H':'𝗛','I':'𝗜','J':'𝗝',
+            'K':'𝗞','L':'𝗟','M':'𝗠','N':'𝗡','O':'𝗢','P':'𝗣','Q':'𝗤','R':'𝗥','S':'𝗦','T':'𝗧',
+            'U':'𝗨','V':'𝗩','W':'𝗪','X':'𝗫','Y':'𝗬','Z':'𝗭',
+            'a':'𝗮','b':'𝗯','c':'𝗰','d':'𝗱','e':'𝗲','f':'𝗳','g':'𝗴','h':'𝗵','i':'𝗶','j':'𝗷',
+            'k':'𝗸','l':'𝗹','m':'𝗺','n':'𝗻','o':'𝗼','p':'𝗽','q':'𝗾','r':'𝗿','s':'𝘀','t':'𝘁',
+            'u':'𝘂','v':'𝘃','w':'𝘄','x':'𝘅','y':'𝘆','z':'𝘇'
+        };
+        let res = '';
+        for(let ch of str) res += map[ch] || ch;
+        return res;
+    }
+    function getBoldHeader(raw) { return raw ? toUnicodeBold(raw) : ''; }
+
+    // Genre state
+    let selectedGenres = [];
+    const MASTER_GENRES = [
+        "Action","Adventure","Comedy","Drama","Fantasy","Horror","Mystery","Romance","Sci-Fi","Slice of Life",
+        "Supernatural","Thriller","Isekai","Psychological","Ecchi","Shounen","Shoujo","Seinen","Josei","Mecha",
+        "Harem","Reverse Harem","School","Sports","Historical","Magic","Demons","Vampire","Game","Music","Police"
+    ];
+
+    const genreChipsArea = document.getElementById('genreChipsArea');
+    const genreSearchInput = document.getElementById('genreSearchInput');
+    const genreSuggestionsDiv = document.getElementById('genreSuggestions');
+    const addGenreBtn = document.getElementById('addGenreBtn');
+    const genreHidden = document.getElementById('genreHidden');
+
+    function renderGenreChips() {
+        genreChipsArea.innerHTML = '';
+        if(selectedGenres.length === 0){
+            let placeholder = document.createElement('div');
+            placeholder.className = 'genre-chip';
+            placeholder.style.opacity = '0.7';
+            placeholder.innerText = 'Belum ada genre, tambahkan →';
+            genreChipsArea.appendChild(placeholder);
+        } else {
+            selectedGenres.forEach((genre, idx) => {
+                const chip = document.createElement('div');
+                chip.className = 'genre-chip';
+                chip.innerHTML = `${genre} <button class="remove-genre" data-index="${idx}">✖</button>`;
+                genreChipsArea.appendChild(chip);
+            });
+        }
+        genreHidden.value = selectedGenres.join(', ');
+        updatePreview();
+        document.querySelectorAll('.remove-genre').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const idx = parseInt(btn.getAttribute('data-index'));
+                if(!isNaN(idx)) {
+                    selectedGenres.splice(idx,1);
+                    renderGenreChips();
+                    updateSuggestionList(genreSearchInput.value);
+                }
+            });
+        });
+    }
+
+    function addGenre(genreRaw) {
+        let newGenre = genreRaw.trim();
+        if(newGenre === "") return false;
+        if(selectedGenres.some(g => g.toLowerCase() === newGenre.toLowerCase())) {
+            showNotif("⚠️ Genre sudah ada!");
+            return false;
+        }
+        selectedGenres.push(newGenre);
+        renderGenreChips();
+        genreSearchInput.value = '';
+        updateSuggestionList('');
+        genreSuggestionsDiv.classList.remove('show');
+        return true;
+    }
+
+    function updateSuggestionList(keyword) {
+        const kw = keyword.toLowerCase().trim();
+        let filtered = MASTER_GENRES.filter(g => !selectedGenres.some(sg => sg.toLowerCase() === g.toLowerCase()));
+        if(kw) filtered = filtered.filter(g => g.toLowerCase().includes(kw));
+        genreSuggestionsDiv.innerHTML = '';
+        if(filtered.length === 0) {
+            genreSuggestionsDiv.innerHTML = `<div class="suggestion-item" style="opacity:0.7;">Ketik + Tambah untuk genre custom</div>`;
+        } else {
+            filtered.forEach(genre => {
+                const item = document.createElement('div');
+                item.className = 'suggestion-item';
+                item.innerText = genre;
+                item.addEventListener('click', () => {
+                    addGenre(genre);
+                    genreSearchInput.value = '';
+                    genreSuggestionsDiv.classList.remove('show');
+                });
+                genreSuggestionsDiv.appendChild(item);
+            });
+        }
+    }
+
+    function onSearchInput() {
+        const val = genreSearchInput.value;
+        updateSuggestionList(val);
+        genreSuggestionsDiv.classList.add('show');
+    }
+
+    document.addEventListener('click', function(e) {
+        const container = document.getElementById('genreContainer');
+        if(container && !container.contains(e.target)) {
+            genreSuggestionsDiv.classList.remove('show');
+        }
+    });
+
+    // ========== GENERATE OUTPUT - HANYA FIELD YANG TERISI ==========
+    function generateVTText() {
+        const rawHeader = document.getElementById('headerInput').value.trim();
+        const sinopsis = document.getElementById('sinopsisInput').value.trim();
+        const preset = document.getElementById('presetInput').value.trim();
+        const title = document.getElementById('titleInput').value.trim();
+        const chapter = document.getElementById('chapterInput').value.trim();
+        const mcName = document.getElementById('mcNameInput').value.trim();
+        const genderRad = document.querySelector('input[name="gender"]:checked');
+        const genderVal = genderRad ? genderRad.value : 'Male';
+        const genderBold = genderVal === 'Male' ? '𝗠𝗮𝗹𝗲' : '𝗙𝗲𝗺𝗮𝗹𝗲';
+        
+        const genreStr = genreHidden.value;
+        const author = document.getElementById('authorInput').value.trim();
+        const studio = document.getElementById('studioInput').value.trim();
+        const status = document.getElementById('statusInput').value;
+        const format = document.getElementById('formatInput').value;
+        
+        const boldHeader = getBoldHeader(rawHeader);
+        
+        const lines = [];
+        
+        // Header
+        if (boldHeader) {
+            lines.push(boldHeader);
+            lines.push('');
+        }
+        
+        // Sinopsis
+        if (sinopsis) {
+            lines.push(`📝 𝗦𝗶𝗻𝗼𝗽𝘀𝗶𝘀: ${sinopsis}`);
+            lines.push('');
+        }
+        
+        // Preset - SELALU TAMPIL karena punya default "@"
+        if (preset) {
+            lines.push(`📝 𝗣𝗿𝗲𝘀𝗲𝘁: ${preset}`);
+        }
+        
+        // Title
+        if (title) {
+            lines.push(`📌 𝗧𝗶𝘁𝗹𝗲: ${title}`);
+        }
+        
+        // Chapter
+        if (chapter) {
+            lines.push(`📌 𝗖𝗵𝗮𝗽𝘁𝗲𝗿: ${chapter}`);
+        }
+        
+        // MC (hanya jika nama diisi)
+        if (mcName) {
+            lines.push(`📌 𝗠𝗖: ${mcName} (${genderBold})`);
+        }
+        
+        // Genre
+        if (genreStr) {
+            lines.push(`📌 𝗚𝗲𝗻𝗿𝗲: ${genreStr}`);
+        }
+        
+        // Author
+        if (author) {
+            lines.push(`✍️ 𝗔𝘂𝘁𝗵𝗼𝗿: ${author}`);
+        }
+        
+        // Studio
+        if (studio) {
+            lines.push(`📌 𝗦𝘁𝘂𝗱𝗶𝗼: ${studio}`);
+        }
+        
+        // Status (hanya jika dipilih)
+        if (status && status !== "") {
+            lines.push(`📌 𝗦𝘁𝗮𝘁𝘂𝘀: ${status}`);
+        }
+        
+        // Format (hanya jika dipilih)
+        if (format && format !== "") {
+            lines.push(`📌 𝗙𝗼𝗿𝗺𝗮𝘁: ${format}`);
+        }
+        
+        let output = lines.join('\n');
+        output = output.replace(/\n{3,}/g, '\n\n');
+        output = output.trim();
+        
+        return output;
+    }
+
+    function updatePreview() {
+        const previewDiv = document.getElementById('previewArea');
+        if(previewDiv) previewDiv.innerText = generateVTText();
+    }
+
+    async function copyResult() {
+        const previewDiv = document.getElementById('previewArea');
+        const textToCopy = previewDiv.innerText;
+        if(!textToCopy) return;
+        try {
+            await navigator.clipboard.writeText(textToCopy);
+            showNotif('✅ Berhasil disalin!');
+        } catch(err) {
+            const textarea = document.createElement('textarea');
+            textarea.value = textToCopy;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showNotif('✅ Berhasil disalin!');
+        }
+    }
+
+    let notifTimer;
+    function showNotif(msg) {
+        const toast = document.getElementById('notificationToast');
+        if(!toast) return;
+        toast.textContent = msg;
+        toast.classList.add('show');
+        if(notifTimer) clearTimeout(notifTimer);
+        notifTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    function bindCommonEvents() {
+        const ids = ['headerInput','sinopsisInput','presetInput','titleInput','chapterInput','mcNameInput','authorInput','studioInput'];
+        ids.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.addEventListener('input', updatePreview);
+        });
+        document.querySelectorAll('input[name="gender"]').forEach(radio => radio.addEventListener('change', updatePreview));
+        document.getElementById('statusInput').addEventListener('change', updatePreview);
+        document.getElementById('formatInput').addEventListener('change', updatePreview);
+        document.getElementById('copyBtn').addEventListener('click', copyResult);
+    }
+
+    function initGenreSystem() {
+        selectedGenres = [];
+        renderGenreChips();
+        genreSearchInput.addEventListener('input', onSearchInput);
+        genreSearchInput.addEventListener('focus', () => {
+            updateSuggestionList(genreSearchInput.value);
+            genreSuggestionsDiv.classList.add('show');
+        });
+        addGenreBtn.addEventListener('click', () => {
+            const val = genreSearchInput.value.trim();
+            if(val) addGenre(val);
+            else showNotif("Masukkan nama genre");
+        });
+        genreSearchInput.addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') {
+                e.preventDefault();
+                const val = genreSearchInput.value.trim();
+                if(val) addGenre(val);
+                genreSuggestionsDiv.classList.remove('show');
+            }
+        });
+    }
+
+    function setAllFieldsEmpty() {
+        document.getElementById('headerInput').value = '';
+        document.getElementById('sinopsisInput').value = '';
+        // PRESET tetap "@" (tidak dikosongkan)
+        document.getElementById('presetInput').value = '@';
+        document.getElementById('titleInput').value = '';
+        document.getElementById('chapterInput').value = '';
+        document.getElementById('mcNameInput').value = '';
+        document.getElementById('authorInput').value = '';
+        document.getElementById('studioInput').value = '';
+        // Status & Format placeholder kosong
+    }
+
+    function init() {
+        setAllFieldsEmpty();
+        bindCommonEvents();
+        initGenreSystem();
+        updatePreview();
+    }
+    init();
+</script>
+</body>
+</html>
